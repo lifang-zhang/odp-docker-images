@@ -1,7 +1,8 @@
 FROM ubuntu:23.04
 
 ENV DPDK_VERSION=v22.11.3 \
-    XDP_VERSION=v1.2.3
+    XDP_VERSION=v1.2.3 \
+    ONNX_VERSION=1.16.2
 
 RUN apt-get update
 
@@ -27,6 +28,7 @@ RUN apt-get install -yy \
   libconfig-dev \
   libcunit1-dev \
   libpcap-dev \
+  libpng-dev \
   libssl-dev \
   libstdc++-13-dev \
   libsystemd-dev \
@@ -37,7 +39,18 @@ RUN apt-get install -yy \
   ninja-build \
   python3-pip \
   python3-pyelftools \
-  sudo
+  sudo \
+  wget
+
+RUN cd $HOME && \
+    wget https://github.com/microsoft/onnxruntime/releases/download/v${ONNX_VERSION}/onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
+    tar xvf onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
+    cd onnxruntime-linux-x64-${ONNX_VERSION} && \
+    cp include/* /usr/local/include/ && \
+    cp lib/* /usr/local/lib/ && \
+    ldconfig && \
+    cd $HOME && \
+    rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
 
 RUN cd $HOME && \
     git clone http://dpdk.org/git/dpdk-stable --branch ${DPDK_VERSION} --depth 1 ./dpdk && \

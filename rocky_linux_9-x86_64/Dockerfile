@@ -1,6 +1,7 @@
 FROM rockylinux:9
 
-ENV DPDK_VERSION=v22.11.3
+ENV DPDK_VERSION=v22.11.3 \
+    ONNX_VERSION=1.16.2
 
 RUN dnf install -y 'dnf-command(config-manager)'
 RUN dnf config-manager --enable crb
@@ -25,6 +26,7 @@ RUN yum install -y \
 	libconfig-devel \
 	libibverbs-devel \
 	libpcap-devel \
+	libpng-devel \
 	libtool \
 	make \
 	meson \
@@ -36,10 +38,23 @@ RUN yum install -y \
 	python3-pip \
 	procps \
 	sudo \
-	zlib-devel
+	zlib-devel \
+	wget
 
 RUN pip3 install \
+	numpy \
+	onnx \
 	pyelftools
+
+RUN cd $HOME && \
+    wget https://github.com/microsoft/onnxruntime/releases/download/v${ONNX_VERSION}/onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
+    tar xvf onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
+    cd onnxruntime-linux-x64-${ONNX_VERSION} && \
+    cp include/* /usr/local/include/ && \
+    cp lib/* /usr/local/lib/ && \
+    ldconfig && \
+    cd $HOME && \
+    rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
 
 RUN cd $HOME && \
     git clone http://dpdk.org/git/dpdk-stable --branch ${DPDK_VERSION} --depth 1 ./dpdk && \

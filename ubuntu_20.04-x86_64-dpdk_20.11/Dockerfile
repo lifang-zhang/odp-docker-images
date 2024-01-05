@@ -1,7 +1,8 @@
 FROM ubuntu:20.04
 
 ENV DPDK_VERSION=v20.11.9 \
-  IPSEC_MB_VERSION=v0.55
+  IPSEC_MB_VERSION=v0.55 \
+  ONNX_VERSION=1.16.2
 
 RUN apt-get update
 
@@ -25,6 +26,7 @@ RUN apt-get install -yy \
   libconfig-dev \
   libcunit1-dev \
   libpcap-dev \
+  libpng-dev \
   libssl-dev \
   libstdc++-10-dev \
   libtool \
@@ -34,7 +36,18 @@ RUN apt-get install -yy \
   net-tools \
   ninja-build \
   python3-pip \
-  sudo
+  sudo \
+  wget
+
+RUN cd $HOME && \
+    wget https://github.com/microsoft/onnxruntime/releases/download/v${ONNX_VERSION}/onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
+    tar xvf onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
+    cd onnxruntime-linux-x64-${ONNX_VERSION} && \
+    cp include/* /usr/local/include/ && \
+    cp lib/* /usr/local/lib/ && \
+    ldconfig && \
+    cd $HOME && \
+    rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
 
 RUN cd $HOME && \
     git clone https://github.com/intel/intel-ipsec-mb.git --branch ${IPSEC_MB_VERSION} --depth 1 ./ipsec-mb && \
