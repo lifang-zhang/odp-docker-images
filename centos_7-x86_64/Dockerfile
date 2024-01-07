@@ -25,7 +25,6 @@ RUN yum install -y \
 	kmod \
 	libatomic \
 	libcli-devel \
-    libpng-devel \
 	libpcap-devel \
 	libtool \
 	make \
@@ -35,6 +34,16 @@ RUN yum install -y \
 	pkgconfig \
 	sudo \
     wget
+
+RUN cd $HOME && \
+    wget https://download.sourceforge.net/libpng/libpng-1.6.37.tar.gz && \
+    tar xvzf libpng-1.6.37.tar.gz && \
+    cd libpng-1.6.37 && \
+    ./configure && \
+    make && \
+    make install && \
+    cd $HOME && \
+    rm -r ./libpng-1.6.37
 
 RUN cd $HOME && \
     wget https://github.com/microsoft/onnxruntime/releases/download/v${ONNX_VERSION}/onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
