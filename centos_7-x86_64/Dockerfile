@@ -49,8 +49,8 @@ RUN cd $HOME && \
     wget https://github.com/microsoft/onnxruntime/releases/download/v${ONNX_VERSION}/onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
     tar xvf onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
     cd onnxruntime-linux-x64-${ONNX_VERSION} && \
-    cp include/* /usr/local/include/ && \
-    cp lib/* /usr/local/lib/ && \
+    cp include/* /usr/include/ && \
+    cp lib/* /usr/lib/ && \
     ldconfig && \
     cd $HOME && \
     rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
