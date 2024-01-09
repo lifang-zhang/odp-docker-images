@@ -1,7 +1,8 @@
 FROM ubuntu:18.04
 
 ENV DPDK_VERSION=v22.11.3 \
-    AARCH64_CRYPTOLIB_TAG=2445f0e
+    AARCH64_CRYPTOLIB_TAG=2445f0e \
+    ONNX_VERSION=1.16.3
 
 RUN apt-get update
 
@@ -24,6 +25,7 @@ RUN apt-get install -yy \
   libconfig-dev:arm64 \
   libcunit1-dev:arm64 \
   libpcap-dev:arm64 \
+  libpng-dev:arm64 \
   libssl-dev:arm64 \
   libstdc++-7-dev:arm64 \
   pkg-config-aarch64-linux-gnu \
@@ -39,11 +41,23 @@ RUN apt-get install -yy \
   net-tools \
   ninja-build \
   python3-pip \
-  sudo
+  sudo \
+  wget
 
 RUN pip3 install \
   meson \
   pyelftools
+
+RUN cd $HOME && \
+    wget https://github.com/microsoft/onnxruntime/releases/download/v${ONNX_VERSION}/onnxruntime-linux-aarch64-${ONNX_VERSION}.tgz && \
+    tar xvf onnxruntime-linux-aarch64-${ONNX_VERSION}.tgz && \
+    cd onnxruntime-linux-aarch64-${ONNX_VERSION} && \
+    cp include/* /usr/local/include/ && \
+    cp lib/* /usr/local/lib/ && \
+    ldconfig && \
+    cd $HOME && \
+    rm -r ./onnxruntime-linux-aarch64-${ONNX_VERSION}
+
 
 RUN cd $HOME && \
     git clone http://dpdk.org/git/dpdk-stable --branch ${DPDK_VERSION} --depth 1 ./dpdk && \
