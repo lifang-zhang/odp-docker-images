@@ -26,25 +26,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ['ubuntu_18.04-arm64',
+        image: [
                 'ubuntu_18.04-i386',
-                'ubuntu_18.04-x86_64',
-                'ubuntu_20.04-arm64',
                 'ubuntu_20.04-armhf',
-                'ubuntu_20.04-ppc64el',
-                'ubuntu_20.04-riscv64',
-                'ubuntu_20.04-x86_64',
-                'ubuntu_20.04-x86_64-dpdk_19.11',
-                'ubuntu_20.04-x86_64-dpdk_20.11',
-                'ubuntu_20.04-x86_64-dpdk_21.11',
-                'ubuntu_20.04-x86_64-dpdk_22.11',
-                'ubuntu_22.04-x86_64',
-                'ubuntu_22.04-x86_64-static',
-                'ubuntu_22.04-x86_64-ml',
-                'ubuntu_23.04-x86_64',
-                'centos_7-x86_64',
-                'rocky_linux_8-x86_64',
-                'rocky_linux_9-x86_64']
+                'ubuntu_20.04-ppc64el']
 
     steps:
       - uses: actions/checkout@v3
@@ -56,109 +41,6 @@ jobs:
         run: echo "${{ secrets.CONTAINER_REGISTRY_TOKEN }}" | docker login ghcr.io -u ${{ secrets.CONTAINER_REGISTRY_USER }} --password-stdin
 
       - name: Push image
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
-
-  arm64:
-    # Ensuring CI is only run on repo where self-hosted runners are installed
-    if: ${{ github.repository == 'OpenDataPlane/odp-docker-images' }}
-    runs-on: self-hosted
-    env:
-      IMAGE_DIR: ${{matrix.image}}
-      IMAGE_NAME: odp-ci-${{matrix.image}}
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ['ubuntu_18.04-arm64-native',
-                'ubuntu_20.04-arm64-native',
-                'ubuntu_20.04-arm64-native-dpdk_19.11',
-                'ubuntu_20.04-arm64-native-dpdk_20.11',
-                'ubuntu_20.04-arm64-native-dpdk_21.11',
-                'ubuntu_20.04-arm64-native-dpdk_22.11',
-                'ubuntu_22.04-arm64-native',
-                'ubuntu_23.04-arm64-native',
-                'rocky_linux_8-arm64-native',
-                'rocky_linux_9-arm64-native']
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Build image
-        run: docker build $IMAGE_DIR -t $IMAGE_NAME
-
-      - name: Log into registry
-        if: github.event_name == 'push'
-        run: echo "${{ secrets.CONTAINER_REGISTRY_TOKEN }}" | docker login ghcr.io -u ${{ secrets.CONTAINER_REGISTRY_USER }} --password-stdin
-
-      - name: Push image
-        if: github.event_name == 'push'
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
-
-  Coverity:
-    runs-on: ubuntu-20.04
-    env:
-      COVERITY_TOKEN_ODP: ${{ secrets.COVERITY_TOKEN_ODP }}
-      COVERITY_TOKEN_ODP_DPDK: ${{ secrets.COVERITY_TOKEN_ODP_DPDK }}
-      IMAGE_DIR: ${{matrix.image}}
-      IMAGE_NAME: odp-ci-${{matrix.image}}
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ['ubuntu_20.04-x86_64-coverity-linux-generic',
-                'ubuntu_20.04-x86_64-coverity-linux-dpdk']
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Build linux-generic image
-        if: ${{ env.COVERITY_TOKEN_ODP && env.IMAGE_DIR == 'ubuntu_20.04-x86_64-coverity-linux-generic' }}
-        run: |
-          docker build --build-arg COVERITY_TOKEN=${{ secrets.COVERITY_TOKEN_ODP }} $IMAGE_DIR -t $IMAGE_NAME
-          echo "push_image=true" >> $GITHUB_ENV
-
-      - name: Build linux-dpdk image
-        if: ${{ env.COVERITY_TOKEN_ODP_DPDK && env.IMAGE_DIR == 'ubuntu_20.04-x86_64-coverity-linux-dpdk' }}
-        run: |
-          docker build --build-arg COVERITY_TOKEN=${{ secrets.COVERITY_TOKEN_ODP_DPDK }} $IMAGE_DIR -t $IMAGE_NAME
-          echo "push_image=true" >> $GITHUB_ENV
-
-      - name: Log into registry
-        if: env.push_image
-        run: echo "${{ secrets.CONTAINER_REGISTRY_TOKEN }}" | docker login ghcr.io -u ${{ secrets.CONTAINER_REGISTRY_USER }} --password-stdin
-
-      - name: Push image
-        if: env.push_image
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
 
