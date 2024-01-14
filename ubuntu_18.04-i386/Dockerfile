@@ -39,20 +39,19 @@ RUN apt-get install -yy \
   ninja-build \
   python3-pip \
   sudo \
-  wget
+  wget \
+  unzip
 
 RUN pip3 install \
   meson \
   pyelftools
 
 RUN cd $HOME && \
-    wget https://github.com/microsoft/onnxruntime/releases/download/v${ONNX_VERSION}/onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
-    tar xvf onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
-    cd onnxruntime-linux-x64-${ONNX_VERSION} && \
-    cp include/* /usr/local/include/ && \
-    cp lib/* /usr/local/lib/ && \
-    ldconfig && \
-    cd $HOME && \
+    wget https://github.com/microsoft/onnxruntime/archive/refs/tags/v${ONNX_VERSION}.zip && \
+    unzip v${ONNX_VERSION}.zip && \
+    cd onnxruntime-${ONNX_VERSION} && \
+    ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --compile_no_warning_as_error --skip_submodule_sync --cmake_extra_defines CMAKE_C_FLAGS=-m32 CMAKE_CXX_FLAGS=-m32 && \
+    ls && \
     rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
 
 RUN cd $HOME && \
