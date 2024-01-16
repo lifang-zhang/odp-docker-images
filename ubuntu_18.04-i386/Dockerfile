@@ -22,6 +22,7 @@ RUN apt-get install -yy \
   libcunit1-dev:i386 \
   libpcap-dev:i386 \
   libpng-dev:i386 \
+  libc6-dev:i386 \
   libssl-dev:i386 \
   lib32stdc++-7-dev \
   autoconf \
@@ -30,7 +31,9 @@ RUN apt-get install -yy \
   clang \
   gcc \
   gcc-multilib \
+  gcc-i686-linux-gnu \
   g++-multilib \
+  g++-i686-linux-gnu \
   git \
   iproute2 \
   kmod \
@@ -60,9 +63,15 @@ RUN pip3 install \
 RUN cd $HOME && \
     wget https://github.com/microsoft/onnxruntime/archive/refs/tags/v${ONNX_VERSION}.zip && \
     unzip v${ONNX_VERSION}.zip && \
-    cd onnxruntime-${ONNX_VERSION} && \
-    ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --compile_no_warning_as_error --skip_submodule_sync --cmake_extra_defines CMAKE_C_FLAGS=-m32 CMAKE_CXX_FLAGS=-m32 && \
-    ls && \
+    cd onnxruntime-${ONNX_VERSION} && ( \
+    ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --compile_no_warning_as_error \
+    --skip_submodule_sync --allow_running_as_root --skip_tests --cmake_extra_defines \
+    CMAKE_C_FLAGS="-m32 -msse4.1" CMAKE_CXX_FLAGS="-m32 -msse4.1" \
+    CMAKE_C_COMPILER=/usr/bin/i686-linux-gnu-gcc \
+    CMAKE_CXX_COMPILER=/usr/bin/i686-linux-gnu-g++ \
+    CMAKE_FIND_ROOT_PATH=/ CMAKE_SYSTEM_NAME=Linux \
+    CMAKE_SYSTEM_PROCESSOR=i386 CMAKE_CROSSCOMPILING=TRUE \
+    ) && ls && \
     rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
 
 RUN cd $HOME && \
