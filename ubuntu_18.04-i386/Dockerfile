@@ -16,6 +16,8 @@ RUN dpkg --add-architecture i386
 
 RUN apt-get update --fix-missing
 
+Run apt list -a g++-7-i686-linux-gnu
+
 RUN apt-get install -yy \
   libcli-dev:i386 \
   libconfig-dev:i386 \
@@ -31,8 +33,10 @@ RUN apt-get install -yy \
   clang \
   gcc \
   gcc-multilib \
+  gcc-7-i686-linux-gnu \
   gcc-i686-linux-gnu \
   g++-multilib \
+  g++-7-i686-linux-gnu \
   g++-i686-linux-gnu \
   git \
   iproute2 \
