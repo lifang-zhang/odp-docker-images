@@ -33,11 +33,6 @@ RUN apt-get install -yy \
   clang \
   gcc \
   gcc-multilib \
-  gcc-7-i686-linux-gnu \
-  gcc-i686-linux-gnu \
-  g++-multilib \
-  g++-7-i686-linux-gnu \
-  g++-i686-linux-gnu \
   git \
   iproute2 \
   kmod \
@@ -71,8 +66,6 @@ RUN cd $HOME && \
     ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --compile_no_warning_as_error \
     --skip_submodule_sync --allow_running_as_root --skip_tests --cmake_extra_defines \
     CMAKE_C_FLAGS="-m32 -msse4.1" CMAKE_CXX_FLAGS="-m32 -msse4.1" \
-    CMAKE_C_COMPILER=/usr/bin/i686-linux-gnu-gcc \
-    CMAKE_CXX_COMPILER=/usr/bin/i686-linux-gnu-g++ \
     CMAKE_FIND_ROOT_PATH=/ CMAKE_SYSTEM_NAME=Linux \
     CMAKE_SYSTEM_PROCESSOR=i386 CMAKE_CROSSCOMPILING=TRUE \
     ) && ls && \
