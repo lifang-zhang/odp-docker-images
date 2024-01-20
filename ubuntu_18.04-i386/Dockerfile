@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 ENV DPDK_VERSION=v22.11.3 \
-    ONNX_VERSION=1.16.2
+    ONNX_VERSION=1.16.3
 
 RUN apt-get update
 
@@ -64,7 +64,7 @@ RUN cd $HOME && \
     wget https://github.com/microsoft/onnxruntime/archive/refs/tags/v${ONNX_VERSION}.zip && \
     unzip v${ONNX_VERSION}.zip && \
     cd onnxruntime-${ONNX_VERSION} && \
-    ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --compile_no_warning_as_error --skip_submodule_sync --allow_running_as_root --skip_tests --cmake_extra_defines CMAKE_C_FLAGS="-m32 -msse4.1" CMAKE_CXX_FLAGS="-m32 -msse4.1" CMAKE_FIND_ROOT_PATH=/ CMAKE_SYSTEM_NAME=Linux CMAKE_SYSTEM_PROCESSOR=i386 CMAKE_CROSSCOMPILING=TRUE && \
+    ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --compile_no_warning_as_error --skip_submodule_sync --allow_running_as_root --skip_tests --cmake_extra_defines CMAKE_C_FLAGS="-m32 -msse4.1" CMAKE_CXX_FLAGS="-m32 -msse4.1" CMAKE_C_COMPILER=/usr/bin/i686-linux-gnu-gcc CMAKE_CXX_COMPILER=/usr/bin/i686-linux-gnu-g++ CMAKE_FIND_ROOT_PATH=/ CMAKE_SYSTEM_NAME=Linux CMAKE_SYSTEM_PROCESSOR=i386 CMAKE_CROSSCOMPILING=TRUE && \
     ls && \
     rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
 
