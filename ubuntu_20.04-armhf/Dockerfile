@@ -48,7 +48,8 @@ RUN apt-get install -y \
   wget \
   unzip \
   g++-arm-linux-gnueabihf \
-  cmake
+  cmake \
+  flatbuffers-compiler
 
 RUN pip3 install \
   pyelftools
