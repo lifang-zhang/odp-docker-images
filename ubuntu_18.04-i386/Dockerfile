@@ -14,6 +14,8 @@ RUN sed -e 's/^deb http/deb [arch=amd64,i386] http/g' /etc/apt/sources.list -i
 
 RUN dpkg --add-architecture i386
 
+RUN apt-add-repository -y ppa:hnakamur/flatbuffers
+
 RUN apt-get update --fix-missing
 
 Run apt list -a g++-7-i686-linux-gnu
@@ -44,7 +46,8 @@ RUN apt-get install -yy \
   wget \
   unzip \
   build-essential \
-  cmake
+  cmake \
+  flatbuffers-compiler
 
 RUN apt-get install -yy libffi-dev libssl-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev
 
