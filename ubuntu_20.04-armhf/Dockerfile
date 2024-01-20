@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 ENV DPDK_VERSION=v22.11.3 \
-    ONNX_VERSION=1.16.2
+    ONNX_VERSION=1.16.3
 
 RUN apt-get update
 
