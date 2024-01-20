@@ -57,7 +57,7 @@ RUN cd $HOME && \
     wget https://github.com/microsoft/onnxruntime/archive/refs/tags/v${ONNX_VERSION}.zip && \
     unzip v${ONNX_VERSION}.zip && \
     cd onnxruntime-${ONNX_VERSION} && \
-    ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --arm --compile_no_warning_as_error --skip_submodule_sync --skip_tests --cmake_extra_defines CMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc CMAKE_ASM_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc CMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ CMAKE_CXX_FLAGS=-Wno-psabi CMAKE_SYSTEM_NAME=Linux CMAKE_CROSSCOMPILING=TRUE CMAKE_SYSTEM_PROCESSOR=armv7 && \
+    ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --arm --compile_no_warning_as_error --skip_submodule_sync --skip_tests --allow_running_as_root --cmake_extra_defines CMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc CMAKE_ASM_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc CMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ CMAKE_CXX_FLAGS=-Wno-psabi CMAKE_SYSTEM_NAME=Linux CMAKE_CROSSCOMPILING=TRUE CMAKE_SYSTEM_PROCESSOR=armv7 && \
     ls && \
     rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
 
