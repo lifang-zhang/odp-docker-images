@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 ENV DPDK_VERSION=v22.11.3 \
-    ONNX_VERSION=1.16.2
+    ONNX_VERSION=1.16.3
 
 RUN apt-get update
 
@@ -46,7 +46,13 @@ RUN apt-get install -y \
   ninja-build \
   python3-pip \
   sudo \
-  wget
+  wget \
+  unzip \
+  g++-powerpc64le-linux-gnu
+
+RUN python3 -m pip install cmake && \
+  which cmake && \
+  cmake --version
 
 RUN pip3 install \
   numpy \
@@ -54,14 +60,16 @@ RUN pip3 install \
   pyelftools
 
 RUN cd $HOME && \
-    wget https://github.com/microsoft/onnxruntime/releases/download/v${ONNX_VERSION}/onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
-    tar xvf onnxruntime-linux-x64-${ONNX_VERSION}.tgz && \
-    cd onnxruntime-linux-x64-${ONNX_VERSION} && \
-    cp include/* /usr/local/include/ && \
-    cp lib/* /usr/local/lib/ && \
+    wget https://github.com/microsoft/onnxruntime/archive/refs/tags/v${ONNX_VERSION}.zip && \
+    unzip v${ONNX_VERSION}.zip && \
+    cd onnxruntime-${ONNX_VERSION} && \
+    ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --compile_no_warning_as_error --skip_submodule_sync --skip_tests --allow_running_as_root --cmake_extra_defines CMAKE_C_COMPILER=/usr/bin/powerpc64le-linux-gnu-gcc CMAKE_ASM_COMPILER=/usr/bin/powerpc64le-linux-gnu-gcc CMAKE_CXX_COMPILER=/usr/bin/powerpc64le-linux-gnu-g++ CMAKE_CXX_FLAGS=-Wno-psabi CMAKE_SYSTEM_NAME=Linux CMAKE_CROSSCOMPILING=TRUE CMAKE_SYSTEM_PROCESSOR=ppc64le && \
+    tools/ci_build/github/linux/copy_strip_binary.sh -r build/Linux/ -a onnxruntime -l libonnxruntime.so.1.16.3 -c RelWithDebInfo -s . -t 2ac381c55397dffff327cc6efecf6f95a70f90a1 && \
+    cp build/Linux/onnxruntime/include/* /usr/local/include/ && \
+    cp build/Linux/onnxruntime/lib/* /usr/local/lib/ && \
     ldconfig && \
     cd $HOME && \
-    rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
+    rm -r ./onnxruntime-${ONNX_VERSION}
 
 RUN cd $HOME && \
     git clone http://dpdk.org/git/dpdk-stable --branch ${DPDK_VERSION} --depth 1 ./dpdk && \
