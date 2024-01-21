@@ -14,8 +14,6 @@ RUN sed -e 's/^deb http/deb [arch=amd64,i386] http/g' /etc/apt/sources.list -i
 
 RUN dpkg --add-architecture i386
 
-RUN apt-add-repository -y ppa:hnakamur/flatbuffers
-
 RUN apt-get update --fix-missing
 
 Run apt list -a g++-7-i686-linux-gnu
@@ -46,8 +44,7 @@ RUN apt-get install -yy \
   wget \
   unzip \
   build-essential \
-  cmake \
-  flatbuffers-compiler
+  cmake
 
 RUN apt-get install -yy libffi-dev libssl-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev
 
@@ -61,7 +58,8 @@ RUN python3.7 --version
 
 RUN pip3 install \
   meson \
-  pyelftools
+  pyelftools \
+  flatbuffers
 
 RUN cd $HOME && \
     wget https://github.com/microsoft/onnxruntime/archive/refs/tags/v${ONNX_VERSION}.zip && \
