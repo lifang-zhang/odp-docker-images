@@ -48,11 +48,11 @@ RUN apt-get install -y \
   wget \
   unzip \
   g++-arm-linux-gnueabihf \
-  cmake \
-  flatbuffers-compiler
+  cmake
 
 RUN pip3 install \
-  pyelftools
+  pyelftools \
+  flatbuffers
 
 RUN cd $HOME && \
     wget https://github.com/microsoft/onnxruntime/archive/refs/tags/v${ONNX_VERSION}.zip && \
