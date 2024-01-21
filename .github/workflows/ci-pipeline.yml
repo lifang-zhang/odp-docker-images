@@ -27,7 +27,6 @@ jobs:
       fail-fast: false
       matrix:
         image: [
-                'ubuntu_18.04-i386',
                 'ubuntu_20.04-armhf',
                 'ubuntu_20.04-ppc64el']
 
