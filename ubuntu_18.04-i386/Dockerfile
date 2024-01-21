@@ -43,8 +43,7 @@ RUN apt-get install -yy \
   sudo \
   wget \
   unzip \
-  build-essential \
-  cmake
+  build-essential
 
 RUN apt-get install -yy libffi-dev libssl-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev
 
@@ -56,6 +55,10 @@ RUN rm -rf Python-3.7.9.tgz Python-3.7.9
 
 RUN python3.7 --version
 
+RUN python3 -m pip install cmake && \
+  which cmake && \
+  cmake --version
+
 RUN pip3 install \
   meson \
   pyelftools \
@@ -66,8 +69,12 @@ RUN cd $HOME && \
     unzip v${ONNX_VERSION}.zip && \
     cd onnxruntime-${ONNX_VERSION} && \
     ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --compile_no_warning_as_error --skip_submodule_sync --allow_running_as_root --skip_tests --cmake_extra_defines CMAKE_C_FLAGS="-m32 -msse4.1" CMAKE_CXX_FLAGS="-m32 -msse4.1" CMAKE_C_COMPILER=/usr/bin/i686-linux-gnu-gcc CMAKE_CXX_COMPILER=/usr/bin/i686-linux-gnu-g++ CMAKE_FIND_ROOT_PATH=/ CMAKE_SYSTEM_NAME=Linux CMAKE_SYSTEM_PROCESSOR=i386 CMAKE_CROSSCOMPILING=TRUE && \
-    ls && \
-    rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
+    tools/ci_build/github/linux/copy_strip_binary.sh -r build/Linux/ -a onnxruntime -l libonnxruntime.so.1.16.3 -c RelWithDebInfo -s . -t 2ac381c55397dffff327cc6efecf6f95a70f90a1 && \
+    cp build/Linux/onnxruntime/include/* /usr/local/include/ && \
+    cp build/Linux/onnxruntime/lib/* /usr/local/lib/ && \
+    ldconfig && \
+    cd $HOME && \
+    rm -r ./onnxruntime-${ONNX_VERSION}
 
 RUN cd $HOME && \
     git clone http://dpdk.org/git/dpdk-stable --branch ${DPDK_VERSION} --depth 1 ./dpdk && \
