@@ -62,8 +62,12 @@ RUN cd $HOME && \
     unzip v${ONNX_VERSION}.zip && \
     cd onnxruntime-${ONNX_VERSION} && \
     ./build.sh --config RelWithDebInfo --build_shared_lib --parallel --arm --compile_no_warning_as_error --skip_submodule_sync --skip_tests --allow_running_as_root --cmake_extra_defines CMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc CMAKE_ASM_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc CMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ CMAKE_CXX_FLAGS=-Wno-psabi CMAKE_SYSTEM_NAME=Linux CMAKE_CROSSCOMPILING=TRUE CMAKE_SYSTEM_PROCESSOR=armv7 && \
-    ls && \
-    rm -r ./onnxruntime-linux-x64-${ONNX_VERSION}
+    tools/ci_build/github/linux/copy_strip_binary.sh -r build/Linux/ -a onnxruntime -l libonnxruntime.so.1.16.3 -c RelWithDebInfo -s . -t 2ac381c55397dffff327cc6efecf6f95a70f90a1 && \
+    cp build/Linux/onnxruntime/include/* /usr/local/include/ && \
+    cp build/Linux/onnxruntime/lib/* /usr/local/lib/ && \
+    ldconfig && \
+    cd $HOME && \
+    rm -r ./onnxruntime-${ONNX_VERSION}
 
 RUN cd $HOME && \
     git clone http://dpdk.org/git/dpdk-stable --branch ${DPDK_VERSION} --depth 1 ./dpdk && \
