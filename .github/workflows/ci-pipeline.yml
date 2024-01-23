@@ -27,8 +27,8 @@ jobs:
       fail-fast: false
       matrix:
         image: [
-                'ubuntu_20.04-armhf',
-                'ubuntu_20.04-ppc64el']
+                'ubuntu_18.04-i386'
+                ]
 
     steps:
       - uses: actions/checkout@v3
