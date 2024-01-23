@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV DPDK_VERSION=v22.11.3 \
     ONNX_VERSION=1.16.3
@@ -41,7 +41,6 @@ RUN apt-get install -yy \
   sudo \
   wget \
   unzip \
-  build-essential \
   gcc-multilib \
   gcc-i686-linux-gnu \
   g++-multilib \
