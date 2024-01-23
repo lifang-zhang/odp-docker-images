@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 ENV DPDK_VERSION=v22.11.3 \
     ONNX_VERSION=1.16.3
@@ -16,8 +16,6 @@ RUN sed -e 's/^deb http/deb [arch=amd64,i386] http/g' /etc/apt/sources.list -i
 
 RUN apt-get update --fix-missing
 
-Run apt list -a g++-7-i686-linux-gnu
-
 RUN apt-get install -yy \
   libcli-dev:i386 \
   libconfig-dev:i386 \
@@ -26,7 +24,6 @@ RUN apt-get install -yy \
   libpng-dev:i386 \
   libc6-dev:i386 \
   libssl-dev:i386 \
-  libncurses5:i386 \
   libstdc++6:i386 \
   autoconf \
   automake \
@@ -45,7 +42,10 @@ RUN apt-get install -yy \
   wget \
   unzip \
   build-essential \
-  g++-multilib
+  gcc-multilib \
+  gcc-i686-linux-gnu \
+  g++-multilib \
+  g++-i686-linux-gnu
 
 RUN apt-get install -yy libffi-dev libssl-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev
 
