@@ -38,20 +38,14 @@ RUN apt-get install -yy \
   python3-pip \
   sudo \
   wget \
-  unzip \
+  unzip
+
+Run gcc --version
+
+RUN apt-get install -yy \
   gcc-multilib \
   gcc-i686-linux-gnu \
   g++-i686-linux-gnu
-
-RUN apt-get install -yy libffi-dev libssl-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev
-
-RUN wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz
-RUN tar xzf Python-3.7.9.tgz
-RUN cd Python-3.7.9 && ./configure --enable-optimizations && make && make install
-
-RUN rm -rf Python-3.7.9.tgz Python-3.7.9
-
-RUN python3.7 --version
 
 RUN python3 -m pip install cmake && \
   which cmake && \
