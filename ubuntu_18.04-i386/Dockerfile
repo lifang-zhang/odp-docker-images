@@ -16,15 +16,15 @@ RUN sed -e 's/^deb http/deb [arch=amd64,i386] http/g' /etc/apt/sources.list -i
 
 RUN apt-get update --fix-missing
 
+RUN apt-get install -yy libc6:i386 libncurses5:i386 libstdc++6:i386
+
 RUN apt-get install -yy \
-  libcli-dev:i386 \
+  libcli-dev \
   libconfig-dev:i386 \
   libcunit1-dev:i386 \
   libpcap-dev:i386 \
   libpng-dev:i386 \
-  libc6-dev:i386 \
   libssl-dev:i386 \
-  libstdc++6:i386 \
   autoconf \
   automake \
   ccache \
