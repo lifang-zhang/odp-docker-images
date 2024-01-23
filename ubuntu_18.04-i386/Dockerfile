@@ -3,6 +3,8 @@ FROM ubuntu:18.04
 ENV DPDK_VERSION=v22.11.3 \
     ONNX_VERSION=1.16.3
 
+RUN dpkg --add-architecture i386
+
 RUN apt-get update
 
 RUN apt-get install -yy --no-install-recommends \
@@ -11,8 +13,6 @@ RUN apt-get install -yy --no-install-recommends \
 	gnupg-agent
 
 RUN sed -e 's/^deb http/deb [arch=amd64,i386] http/g' /etc/apt/sources.list -i
-
-RUN dpkg --add-architecture i386
 
 RUN apt-get update --fix-missing
 
@@ -26,7 +26,6 @@ RUN apt-get install -yy \
   libpng-dev:i386 \
   libc6-dev:i386 \
   libssl-dev:i386 \
-  lib32stdc++-7-dev \
   libncurses5:i386 \
   libstdc++6:i386 \
   autoconf \
@@ -46,8 +45,7 @@ RUN apt-get install -yy \
   wget \
   unzip \
   build-essential \
-  g++-i686-linux-gnu \
-  gcc-i686-linux-gnu
+  g++-multilib
 
 RUN apt-get install -yy libffi-dev libssl-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev
 
