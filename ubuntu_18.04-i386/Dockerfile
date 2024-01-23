@@ -43,7 +43,6 @@ RUN apt-get install -yy \
 Run gcc --version
 
 RUN apt-get install -yy \
-  gcc-multilib \
   gcc-11-i686-linux-gnu \
   g++-11-i686-linux-gnu
 
