@@ -44,8 +44,12 @@ Run gcc --version
 
 RUN apt-get install -yy \
   gcc-11-i686-linux-gnu \
-  g++-11-i686-linux-gnu \
-  ls /usr/bin/i686-linux-gnu-gcc-11 /usr/bin/i686-linux-gnu-g++-11
+  g++-11-i686-linux-gnu
+
+RUN find / -name 'i686-linux-gnu-g++-11*' 2>/dev/null
+
+Run which i686-linux-gnu-gcc-11
+RUN which i686-linux-gnu-g++-11
 
 RUN python3 -m pip install cmake && \
   which cmake && \
