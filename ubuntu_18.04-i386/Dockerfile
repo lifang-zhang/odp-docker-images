@@ -27,6 +27,8 @@ RUN apt-get install -yy \
   libc6-dev:i386 \
   libssl-dev:i386 \
   lib32stdc++-7-dev \
+  libncurses5:i386 \
+  libstdc++6:i386 \
   autoconf \
   automake \
   ccache \
@@ -43,7 +45,9 @@ RUN apt-get install -yy \
   sudo \
   wget \
   unzip \
-  build-essential
+  build-essential \
+  g++-i686-linux-gnu \
+  gcc-i686-linux-gnu
 
 RUN apt-get install -yy libffi-dev libssl-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev
 
