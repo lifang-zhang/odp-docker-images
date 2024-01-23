@@ -16,8 +16,6 @@ RUN sed -e 's/^deb http/deb [arch=amd64,i386] http/g' /etc/apt/sources.list -i
 
 RUN apt-get update --fix-missing
 
-RUN apt-get install -yy libc6:i386 libncurses5:i386 libstdc++6:i386
-
 RUN apt-get install -yy \
   libcli-dev \
   libconfig-dev:i386 \
@@ -25,12 +23,12 @@ RUN apt-get install -yy \
   libpcap-dev:i386 \
   libpng-dev:i386 \
   libssl-dev:i386 \
+  libc6-dev:i386 \
   autoconf \
   automake \
   ccache \
   clang \
   gcc \
-  gcc-multilib \
   git \
   iproute2 \
   kmod \
@@ -43,7 +41,6 @@ RUN apt-get install -yy \
   unzip \
   gcc-multilib \
   gcc-i686-linux-gnu \
-  g++-multilib \
   g++-i686-linux-gnu
 
 RUN apt-get install -yy libffi-dev libssl-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev
