@@ -44,8 +44,8 @@ Run gcc --version
 
 RUN apt-get install -yy \
   gcc-multilib \
-  gcc-i686-linux-gnu \
-  g++-i686-linux-gnu
+  gcc-11-i686-linux-gnu \
+  g++-11-i686-linux-gnu
 
 RUN python3 -m pip install cmake && \
   which cmake && \
