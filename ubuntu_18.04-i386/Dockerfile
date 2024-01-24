@@ -32,7 +32,6 @@ RUN apt-get install -yy \
   gcc-10 \
   gcc-11 \
   gcc-12 \
-  gcc-13 \
   git \
   iproute2 \
   kmod \
@@ -40,7 +39,6 @@ RUN apt-get install -yy \
   libstdc++-10-dev \
   libstdc++-11-dev \
   libstdc++-12-dev \
-  libstdc++-13-dev \
   net-tools \
   ninja-build \
   python3-pip \
