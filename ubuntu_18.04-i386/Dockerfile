@@ -45,9 +45,9 @@ RUN apt-get install -yy \
   sudo \
   wget \
   unzip \
-  gcc-11-i686-linux-gnu \
-  g++-11-i686-linux-gnu \
-  gcc-multilib
+  gcc-11-i686-linux-gnu=11.4.0-1ubuntu1~22.04cross1 \
+  g++-11-i686-linux-gnu=11.4.0-1ubuntu1~22.04cross1 \
+  gcc-multilib=4:11.2.0-1ubuntu1
 
 RUN python3 -m pip install cmake && \
   which cmake && \
