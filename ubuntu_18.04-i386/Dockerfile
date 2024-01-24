@@ -29,27 +29,27 @@ RUN apt-get install -yy \
   ccache \
   clang \
   gcc \
+  gcc-10 \
+  gcc-11 \
+  gcc-12 \
+  gcc-13 \
   git \
   iproute2 \
   kmod \
   libtool \
+  libstdc++-10-dev \
+  libstdc++-11-dev \
+  libstdc++-12-dev \
+  libstdc++-13-dev \
   net-tools \
   ninja-build \
   python3-pip \
   sudo \
   wget \
-  unzip
-
-Run gcc --version
-
-RUN apt-get install -yy \
+  unzip \
   gcc-11-i686-linux-gnu \
-  g++-11-i686-linux-gnu
-
-RUN find / -name 'i686-linux-gnu-g++-11*' 2>/dev/null
-
-Run which i686-linux-gnu-gcc-11
-RUN which i686-linux-gnu-g++-11
+  g++-11-i686-linux-gnu \
+  gcc-multilib
 
 RUN python3 -m pip install cmake && \
   which cmake && \
