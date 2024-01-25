@@ -71,7 +71,10 @@ RUN apt-get autoremove -yy && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -yy \
+RUN apt-get update
+RUN apt install aptitude
+
+RUN aptitude -y install \
   gcc-multilib \
   g++-multilib
 
