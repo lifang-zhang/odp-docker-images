@@ -28,7 +28,7 @@ RUN apt-get install -yy \
   automake \
   ccache \
   clang \
-  gcc \
+  gcc-9 \
   git \
   iproute2 \
   kmod \
