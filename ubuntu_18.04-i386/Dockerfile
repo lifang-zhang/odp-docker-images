@@ -12,6 +12,9 @@ RUN apt-get install -yy --no-install-recommends \
 
 RUN sed -e 's/^deb http/deb [arch=amd64,i386] http/g' /etc/apt/sources.list -i
 
+# Required for gcc-9
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test
+
 RUN dpkg --add-architecture i386
 
 RUN apt-get update --fix-missing
