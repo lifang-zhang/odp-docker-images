@@ -1,9 +1,7 @@
-FROM ubuntu:22.04
+FROM ubuntu:18.04
 
 ENV DPDK_VERSION=v22.11.3 \
     ONNX_VERSION=1.16.3
-
-RUN dpkg --add-architecture i386
 
 RUN apt-get update
 
@@ -14,16 +12,18 @@ RUN apt-get install -yy --no-install-recommends \
 
 RUN sed -e 's/^deb http/deb [arch=amd64,i386] http/g' /etc/apt/sources.list -i
 
+RUN dpkg --add-architecture i386
+
 RUN apt-get update --fix-missing
 
 RUN apt-get install -yy \
-  libcli-dev \
+  libcli-dev:i386 \
   libconfig-dev:i386 \
   libcunit1-dev:i386 \
   libpcap-dev:i386 \
   libpng-dev:i386 \
-  libssl-dev:i386 \
   libc6-dev:i386 \
+  libssl-dev:i386 \
   autoconf \
   automake \
   ccache \
@@ -44,9 +44,18 @@ RUN apt-get install -yy \
   g++-i686-linux-gnu \
   aptitude
 
-RUN python3 -m pip install cmake && \
-  which cmake && \
-  cmake --version
+# Building onnxruntime requires python3
+RUN apt-get install -yy libffi-dev libssl-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev
+
+RUN wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz
+RUN tar xzf Python-3.7.9.tgz
+RUN cd Python-3.7.9 && ./configure --enable-optimizations && make && make install
+
+RUN rm -rf Python-3.7.9.tgz Python-3.7.9
+
+RUN python3.7 --version
+
+RUN python3 -m pip install cmake
 
 RUN pip3 install \
   meson \
