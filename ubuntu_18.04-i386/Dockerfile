@@ -33,7 +33,6 @@ RUN apt-get install -yy \
   iproute2 \
   kmod \
   libtool \
-  libstdc++-11-dev \
   net-tools \
   ninja-build \
   python3-pip \
